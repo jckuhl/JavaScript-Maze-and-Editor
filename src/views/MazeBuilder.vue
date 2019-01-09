@@ -1,26 +1,34 @@
 <template>
     <div>
         <h1>MazeBuilder</h1>
-        <label for="name">
-            Name of your maze:
-            <input type="text" id="name" v-model="name">
-        </label>
-        <label for="width">
-            Height:
-            <input type="text" id="width" v-model="width">
-        </label>
-        <label for="height">
-            Width:
-            <input type="text" id="height" v-model="height">
-        </label>
-        <button @click="generate" :disabled="isInputInvalid">Generate!</button>
-        <maze-generator :mazeConfig="config" v-if="editor"/>
+        <div class="flex">
+            <div class="sidebar">
+                <sidebar />
+            </div>
+            <div class="main">
+                <label for="name">
+                    Name of your maze:
+                    <input type="text" id="name" v-model="name">
+                </label>
+                <label for="width">
+                    Height:
+                    <input type="text" id="width" v-model="width">
+                </label>
+                <label for="height">
+                    Width:
+                    <input type="text" id="height" v-model="height">
+                </label>
+                <button @click="generate" :disabled="isInputInvalid">Generate!</button>
+                <maze-generator :mazeConfig="config" v-if="editor" />
+            </div>
+        </div>
     </div>
 </template>
 
 <script lang="ts">
 import Vue from 'vue';
 import MazeGenerator from '@/components/MazeGenerator.vue';
+import Sidebar from '@/components/Sidebar.vue';
 
 interface IMazeConfig {
     name: string;
@@ -32,7 +40,8 @@ interface IMazeConfig {
 export default Vue.extend({
     name: 'MazeBuilder',
     components: {
-        MazeGenerator
+        MazeGenerator,
+        Sidebar
     },
     data() {
         return {
@@ -67,4 +76,21 @@ export default Vue.extend({
     }
 });
 </script>
+
+<style scoped>
+.flex {
+    display: flex;
+    justify-content: space-between;
+}
+
+.sidebar {
+    width: 15%;
+}
+
+.main {
+    width: 100%;
+}
+
+</style>
+
 

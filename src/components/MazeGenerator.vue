@@ -29,6 +29,7 @@
 <script lang="ts">
 import Vue from 'vue';
 import { manualMazeBuilder } from '@/models/mazebuilder';
+import { MazeData } from '@/models/mazedata';
 import store from '@/store';
 
 enum MODE {
@@ -124,7 +125,7 @@ export default Vue.extend({
             square.classList.remove('hover-end');
         },
         save() {
-            const maze = {
+            const maze: MazeData = {
                 name: this.mazeConfig.name,
                 width: this.mazeConfig.width,
                 height: this.mazeConfig.height,

@@ -1,14 +1,15 @@
 import Vue from 'vue';
 import Vuex from 'vuex';
+import { MazeData } from './models/mazedata';
 
 Vue.use(Vuex);
 
 export default new Vuex.Store({
     state: {
-        mazeData: [] as any[]
+        mazeData: [] as MazeData[]
     },
     mutations: {
-        mazeData(store, payload: any) {
+        mazeData(store, payload: MazeData) {
             store.mazeData.push(payload);
         }
     },
@@ -16,6 +17,6 @@ export default new Vuex.Store({
 
     },
     getters: {
-        
+
     }
 });
