@@ -12,6 +12,7 @@ export function manualMazeBuilder(config: IMazeBuildConfig): HTMLDivElement[] {
     for (let i = 0; i < size; i++) {
         const square = document.createElement('div');
         square.classList.add('square');
+        square.dataset.index = i.toString();
         squares.push(square);
         config.maze.appendChild(square);
     }

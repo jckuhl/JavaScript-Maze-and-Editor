@@ -1,33 +1,34 @@
 <template>
-  <div id="app">
-    <h1>JavaScript Maze</h1>
-    <div id="nav">
-      <router-link to="/">Build It!</router-link> |
-      <router-link to="/mazesolver">Solve It!</router-link>
+    <div id="app">
+        <h1>JavaScript Maze</h1>
+        <div id="nav">
+            <router-link to="/">Build It!</router-link> |
+            <router-link to="/mazesolver">Solve It!</router-link>
+        </div>
+        <router-view />
     </div>
-    <router-view/>
-  </div>
 </template>
 
 <style>
 #app {
-  font-family: 'Avenir', Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
+    font-family: 'Avenir', Helvetica, Arial, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-align: center;
+    color: #2c3e50;
 }
+
 #nav {
-  padding: 30px;
+    padding: 30px;
 }
 
 #nav a {
-  font-weight: bold;
-  color: #2c3e50;
+    font-weight: bold;
+    color: #2c3e50;
 }
 
 #nav a.router-link-exact-active {
-  color: #42b983;
+    color: #42b983;
 }
 
 .square {
@@ -35,6 +36,22 @@
     height: 25px;
     border: 1px solid grey;
     margin: -1px 0 0 -1px;
+}
+
+/* .square:hover {
+    background-color: rgba(0, 0, 0, 0.5);
+} */
+
+.hover-wall {
+    background-color: rgba(0, 0, 0, 0.5) !important;
+}
+
+.hover-start {
+    background-color: rgba(0, 0, 255, 0.5) !important;
+}
+
+.hover-end {
+    background-color: rgba(255, 0, 255, 0.5) !important;
 }
 
 .wall {
