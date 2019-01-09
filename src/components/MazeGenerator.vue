@@ -20,7 +20,8 @@
             <div id="grid" class="grid">
 
             </div>
-            <button>Save!</button>
+            <button @click="clear">Clear</button>
+            <button @click="save" :disabled="invalidMazeData">Save!</button>
         </div>
     </div>
 </template>
@@ -28,6 +29,7 @@
 <script lang="ts">
 import Vue from 'vue';
 import { manualMazeBuilder } from '@/models/mazebuilder';
+import store from '@/store';
 
 enum MODE {
     WALL, START, END, NONE
@@ -57,6 +59,9 @@ export default Vue.extend({
         },
         END(): object {
             return { 'selector-selected' : this.mode === MODE.END };
+        },
+        invalidMazeData(): boolean {
+            return this.start === -1 || this.end === -1 || this.start === this.end;
         }
     },
     methods: {
@@ -95,7 +100,7 @@ export default Vue.extend({
                     target.classList.remove('wall');
                     this.walls = this.walls.filter((index: number) => index !== i);
                 }
-                this.start = i;
+                this.end = i;
             }
         },
         mouseOver(event: MouseEvent) {
@@ -127,6 +132,17 @@ export default Vue.extend({
                 start: this.start,
                 end: this.end
             }
+            store.commit('mazeData', maze);
+            let mazeData = store.state.mazeData;
+            localStorage.setItem('mazeData', JSON.stringify(mazeData));
+        },
+        clear() {
+            this.start = -1;
+            this.end = -1;
+            this.walls = [] as number[];
+            this.squares.forEach(square=> {
+                square.classList.remove('wall', 'start', 'end');
+            });
         }
     },
     mounted() {

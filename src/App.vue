@@ -1,6 +1,6 @@
 <template>
     <div id="app">
-        <h1>JavaScript Maze</h1>
+        <h1>TypeScript Maze</h1>
         <div id="nav">
             <router-link to="/">Build It!</router-link> |
             <router-link to="/mazesolver">Solve It!</router-link>
