@@ -2,6 +2,8 @@
 node_modules
 /dist
 
+DONOTCOUNT.txt
+
 # local env files
 .env.local
 .env.*.local

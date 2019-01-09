@@ -19,7 +19,7 @@
                     <input type="text" id="height" v-model="height">
                 </label>
                 <button @click="generate" :disabled="isInputInvalid">Generate!</button>
-                <maze-generator :mazeConfig="config" v-if="editor" />
+                <maze-generator :mazeConfig="config" v-if="setEditor" />
             </div>
         </div>
     </div>
@@ -29,12 +29,13 @@
 import Vue from 'vue';
 import MazeGenerator from '@/components/MazeGenerator.vue';
 import Sidebar from '@/components/Sidebar.vue';
+import store from '@/store';
+import { MazeData } from '@/models/mazedata';
 
 interface IMazeConfig {
     name: string;
     width: number;
     height: number;
-    id: string;
 }
 
 export default Vue.extend({
@@ -48,8 +49,7 @@ export default Vue.extend({
             name: '',
             width: '',
             height: '',
-            mazes: [] as IMazeConfig[],
-            config: {} as IMazeConfig,
+            config: {} as MazeData,
             invalidData: false,
             editor: false
         }
@@ -61,6 +61,9 @@ export default Vue.extend({
             const height = parseInt(this.height);
             const validValues = width > 0 && width < 500 && height > 0 && height < 500;
             return !(fieldsFilledIn && validValues);
+        },
+        setEditor(): boolean {
+            return this.editor = store.state.editor;
         }
     },
     methods: {
@@ -69,9 +72,17 @@ export default Vue.extend({
                 name: this.name,
                 width: parseInt(this.width),
                 height: parseInt(this.height),
-                id: "1"
+                walls: null,
+                start: -1,
+                end: -1
             }
             this.editor = true;
+            store.commit('setEditor', this.editor);
+        }
+    },
+    created() {
+        if(store.state.mazeData.length > 0) {
+            this.config = store.getters.getRecentMaze;
         }
     }
 });

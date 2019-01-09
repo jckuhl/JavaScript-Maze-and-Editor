@@ -2,7 +2,7 @@ export interface MazeData {
     name: string;
     width: number;
     height: number;
-    walls: number[];
+    walls: number[] | null;
     start: number;
     end: number;
 }

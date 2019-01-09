@@ -48,7 +48,8 @@ export default Vue.extend({
             mode: MODE.NONE,
             start: -1,
             end: -1,
-            walls: [] as number[]
+            walls: [] as number[],
+            currentMaze: {} as MazeData
         }
     },
     computed: {
@@ -135,7 +136,7 @@ export default Vue.extend({
             }
             store.commit('mazeData', maze);
             let mazeData = store.state.mazeData;
-            localStorage.setItem('mazeData', JSON.stringify(mazeData));
+            // localStorage.setItem('mazeData', JSON.stringify(mazeData));
         },
         clear() {
             this.start = -1;
@@ -147,11 +148,16 @@ export default Vue.extend({
         }
     },
     mounted() {
-        this.squares = manualMazeBuilder({
-            maze: document.getElementById('grid') as HTMLDivElement,
-            width: this.mazeConfig.width,
-            height: this.mazeConfig.height
-        });
+        this.squares = manualMazeBuilder(
+            document.getElementById('grid') as HTMLDivElement,
+            {
+                width: this.mazeConfig.width,
+                height: this.mazeConfig.height,
+                walls: this.mazeConfig.walls,
+                start: this.mazeConfig.start,
+                end: this.mazeConfig.end
+
+            } as MazeData);
         this.squares.forEach(square=> {
             square.addEventListener('click', this.selectSquare.bind(this));
             square.addEventListener('mouseenter', this.mouseOver.bind(this));
