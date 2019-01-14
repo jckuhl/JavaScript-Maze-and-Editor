@@ -66,7 +66,7 @@ export default Vue.extend({
             let id: number;
             do {
                 id = Math.floor(Math.random() * 10000);
-            } while(ids.has(id));
+            } while (ids.has(id));
             ids.add(id);
             store.commit('setId', ids);
             this.config = {

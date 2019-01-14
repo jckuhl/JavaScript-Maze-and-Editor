@@ -129,7 +129,7 @@ export default Vue.extend({
             let id: number;
             do {
                 id = Math.floor(Math.random() * 10000);
-            } while(ids.has(id));
+            } while (ids.has(id));
             ids.add(id);
             store.commit('setId', ids);
             const maze: MazeData = {
@@ -156,7 +156,7 @@ export default Vue.extend({
     },
     mounted() {
         const config = store.getters.getRecentMaze;
-        if(config) {
+        if (config) {
             this.mazeConfig.width = config.width;
             this.mazeConfig.height = config.height;
             this.mazeConfig.walls = config.walls;

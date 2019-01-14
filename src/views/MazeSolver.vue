@@ -10,7 +10,7 @@
 
                 </div>
                 <p>Brute Force Solution:</p>
-                <button>Solve</button>
+                <button @click="bruteForce">Solve</button>
                 <p>Dijkstra's Algorithm: </p>
                 <button>Solve</button>
             </div>
@@ -20,7 +20,7 @@
 
 <script lang="ts">
 import Vue from 'vue';
-import { solve } from '@/models/mazesolver';
+import Solver from '@/models/mazesolver';
 import Sidebar from '@/components/Sidebar.vue';
 import store from '@/store';
 import { MazeData } from '@/models/mazedata';
@@ -33,20 +33,25 @@ export default Vue.extend({
     data() {
         return {
             squares: [] as HTMLDivElement[],
+            mazeConfig: {} as MazeData,
             results: {}
         };
     },
     methods: {
-        test(): void {
-            console.log(solve);
+        bruteForce() {
+            this.results = Solver.bruteForce(
+                this.mazeConfig.start, 
+                this.mazeConfig.end, 
+                this.squares
+            );
         }
     },
     mounted() {
-        const mazeConfig = store.getters.getRecentMaze;
-        if (mazeConfig) {
+        this.mazeConfig = store.getters.getRecentMaze;
+        if (this.mazeConfig) {
             this.squares = manualMazeBuilder(
                 document.getElementById('grid') as HTMLDivElement,
-                mazeConfig
+                this.mazeConfig
             );
         }
     }
