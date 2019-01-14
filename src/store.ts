@@ -7,7 +7,8 @@ Vue.use(Vuex);
 export default new Vuex.Store({
     state: {
         mazeData: [] as MazeData[],
-        editor: false
+        editor: false,
+        mazeIdSet: new Set()
     },
     mutations: {
         mazeData(store, payload: MazeData) {
@@ -15,6 +16,12 @@ export default new Vuex.Store({
         },
         setEditor(store, payload: boolean) {
             store.editor = payload;
+        },
+        setId(store, payload: Set<number>) {
+            store.mazeIdSet = payload;
+        },
+        updateMaze(store, payload: MazeData) {
+            console.log('hello');
         }
     },
     actions: {

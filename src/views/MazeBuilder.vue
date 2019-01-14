@@ -32,12 +32,6 @@ import Sidebar from '@/components/Sidebar.vue';
 import store from '@/store';
 import { MazeData } from '@/models/mazedata';
 
-interface IMazeConfig {
-    name: string;
-    width: number;
-    height: number;
-}
-
 export default Vue.extend({
     name: 'MazeBuilder',
     components: {
@@ -52,13 +46,13 @@ export default Vue.extend({
             config: {} as MazeData,
             invalidData: false,
             editor: false
-        }
+        };
     },
     computed: {
         isInputInvalid(): boolean {
             const fieldsFilledIn: boolean = this.name !== '' && this.width !== '' && this.height !== '';
-            const width = parseInt(this.width);
-            const height = parseInt(this.height);
+            const width = parseInt(this.width, 10);
+            const height = parseInt(this.height, 10);
             const validValues = width > 0 && width < 500 && height > 0 && height < 500;
             return !(fieldsFilledIn && validValues);
         },
@@ -68,20 +62,28 @@ export default Vue.extend({
     },
     methods: {
         generate() {
+            const ids = store.state.mazeIdSet;
+            let id: number;
+            do {
+                id = Math.floor(Math.random() * 10000);
+            } while(ids.has(id));
+            ids.add(id);
+            store.commit('setId', ids);
             this.config = {
                 name: this.name,
-                width: parseInt(this.width),
-                height: parseInt(this.height),
+                width: parseInt(this.width, 10),
+                height: parseInt(this.height, 10),
                 walls: null,
                 start: -1,
-                end: -1
-            }
+                end: -1,
+                id
+            };
             this.editor = true;
             store.commit('setEditor', this.editor);
         }
     },
-    created() {
-        if(store.state.mazeData.length > 0) {
+    mounted() {
+        if (store.state.mazeData.length > 0) {
             this.config = store.getters.getRecentMaze;
         }
     }

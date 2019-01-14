@@ -6,7 +6,7 @@
 </template>
 
 <script lang="ts">
-import Vue from 'vue'
+import Vue from 'vue';
 import { MazeData } from '@/models/mazedata';
 import store from '@/store';
 
@@ -15,7 +15,7 @@ export default Vue.extend({
     data() {
         return {
             mazes: [] as MazeData[]
-        }
+        };
     },
     computed: {
         mazeData(): MazeData[] {

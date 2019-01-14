@@ -5,4 +5,5 @@ export interface MazeData {
     walls: number[] | null;
     start: number;
     end: number;
+    id: number;
 }

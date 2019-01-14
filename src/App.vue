@@ -10,6 +10,16 @@
 </template>
 
 <style>
+
+.flex-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 50%;
+    margin: 0 auto;
+    flex-direction: column;
+}
+
 #app {
     font-family: 'Avenir', Helvetica, Arial, sans-serif;
     -webkit-font-smoothing: antialiased;
@@ -52,6 +62,12 @@
 
 .hover-end {
     background-color: rgba(255, 0, 255, 0.5) !important;
+}
+
+.grid {
+    background-color: yellow;
+    display: grid;
+    margin: 2em 1em;
 }
 
 .wall {

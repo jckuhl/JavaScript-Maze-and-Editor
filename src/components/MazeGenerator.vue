@@ -44,23 +44,22 @@ export default Vue.extend({
     data() {
         return {
             squares: [] as HTMLDivElement[],
-            MODE: MODE,
             mode: MODE.NONE,
             start: -1,
             end: -1,
             walls: [] as number[],
             currentMaze: {} as MazeData
-        }
+        };
     },
     computed: {
         WALL(): object {
-            return { 'selector-selected' : this.mode === MODE.WALL };
+            return { 'selected-option' : this.mode === MODE.WALL };
         },
         START(): object {
-            return { 'selector-selected' : this.mode === MODE.START };
+            return { 'selected-option' : this.mode === MODE.START };
         },
         END(): object {
-            return { 'selector-selected' : this.mode === MODE.END };
+            return { 'selected-option' : this.mode === MODE.END };
         },
         invalidMazeData(): boolean {
             return this.start === -1 || this.end === -1 || this.start === this.end;
@@ -78,27 +77,27 @@ export default Vue.extend({
         },
         selectSquare(event: MouseEvent) {
             const target = event.target as HTMLDivElement;
-            let i = parseInt(target.dataset.index as string);
+            const i = parseInt(target.dataset.index as string, 10);
             if (this.mode === MODE.WALL) {
-                if(target.classList.contains('wall')) {
+                if (target.classList.contains('wall')) {
                     target.classList.remove('wall');
                     this.walls = this.walls.filter((index: number) => index !== i);
                 } else {
                     target.classList.add('wall');
                     this.walls.push(i);
                 }
-            } else if(this.mode === MODE.START) {
-                this.squares.forEach((square)=> square.classList.remove('start'));
+            } else if (this.mode === MODE.START) {
+                this.squares.forEach((square) => square.classList.remove('start'));
                 target.classList.add('start');
-                if(this.walls.includes(i)) {
+                if (this.walls.includes(i)) {
                     target.classList.remove('wall');
                     this.walls = this.walls.filter((index: number) => index !== i);
                 }
                 this.start = i;
-            } else if(this.mode === MODE.END) {
-                this.squares.forEach((square)=> square.classList.remove('end'));
+            } else if (this.mode === MODE.END) {
+                this.squares.forEach((square) => square.classList.remove('end'));
                 target.classList.add('end');
-                if(this.walls.includes(i)) {
+                if (this.walls.includes(i)) {
                     target.classList.remove('wall');
                     this.walls = this.walls.filter((index: number) => index !== i);
                 }
@@ -107,7 +106,7 @@ export default Vue.extend({
         },
         mouseOver(event: MouseEvent) {
             const square = event.target as HTMLDivElement;
-            switch(this.mode) {
+            switch (this.mode) {
                 case MODE.WALL:
                     square.classList.add(`hover-wall`);
                     break;
@@ -126,28 +125,44 @@ export default Vue.extend({
             square.classList.remove('hover-end');
         },
         save() {
+            const ids = store.state.mazeIdSet;
+            let id: number;
+            do {
+                id = Math.floor(Math.random() * 10000);
+            } while(ids.has(id));
+            ids.add(id);
+            store.commit('setId', ids);
             const maze: MazeData = {
                 name: this.mazeConfig.name,
                 width: this.mazeConfig.width,
                 height: this.mazeConfig.height,
                 walls: this.walls,
                 start: this.start,
-                end: this.end
-            }
+                end: this.end,
+                id
+            };
             store.commit('mazeData', maze);
-            let mazeData = store.state.mazeData;
+            const mazeData = store.state.mazeData;
             // localStorage.setItem('mazeData', JSON.stringify(mazeData));
         },
         clear() {
             this.start = -1;
             this.end = -1;
             this.walls = [] as number[];
-            this.squares.forEach(square=> {
+            this.squares.forEach((square) => {
                 square.classList.remove('wall', 'start', 'end');
             });
         }
     },
     mounted() {
+        const config = store.getters.getRecentMaze;
+        if(config) {
+            this.mazeConfig.width = config.width;
+            this.mazeConfig.height = config.height;
+            this.mazeConfig.walls = config.walls;
+            this.mazeConfig.start = config.start;
+            this.mazeConfig.end = config.end;
+        }
         this.squares = manualMazeBuilder(
             document.getElementById('grid') as HTMLDivElement,
             {
@@ -158,7 +173,7 @@ export default Vue.extend({
                 end: this.mazeConfig.end
 
             } as MazeData);
-        this.squares.forEach(square=> {
+        this.squares.forEach((square) => {
             square.addEventListener('click', this.selectSquare.bind(this));
             square.addEventListener('mouseenter', this.mouseOver.bind(this));
             square.addEventListener('mouseout', this.mouseOut.bind(this));
@@ -169,20 +184,17 @@ export default Vue.extend({
 
 <style scoped>
 
-.flex-container {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    width: 50%;
-    margin: 0 auto;
-    flex-direction: column;
-}
-
 .flex {
     display: flex;
     justify-content: space-between;
     align-items: center;
     width: 100%;
+}
+
+.grid {
+    background-color: yellow;
+    display: grid;
+    margin: 2em 1em;
 }
 
 .selector {
@@ -204,13 +216,7 @@ export default Vue.extend({
     border-color: white;
 }
 
-.grid {
-    background-color: yellow;
-    display: grid;
-    margin: 2em 1em;
-}
-
-.selector-selected {
+.selected-option {
     border: 5px solid black;
     background-color: #2c3e50;
     color: white;
