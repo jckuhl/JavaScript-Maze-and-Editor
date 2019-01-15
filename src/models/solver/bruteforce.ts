@@ -1,3 +1,5 @@
+import { MazeResult } from '@/models/mazeresult';
+
 interface IDirections {
     up: (x: number) => number;
     right: (x: number) => number;
@@ -6,7 +8,10 @@ interface IDirections {
     [key: string]: (x: number) => number;
 }
 
-function bruteForce(start: number, end: number, squares: HTMLDivElement[]): boolean {
+function bruteForce(start: number, end: number, squares: HTMLDivElement[]): MazeResult {
+    const path: number[] = [];
+    const wrong: number[] = [];
+    const startTime = performance.now();
     const directions: IDirections = {
         up: (x) => x - 10,
         right: (x) => x + 1,
@@ -150,6 +155,7 @@ function bruteForce(start: number, end: number, squares: HTMLDivElement[]): bool
             if (intersections === []) {
                 // then there's no solution
                 console.log('no solution');
+                status = 'no solution';
                 break;
             }
             const intersection: number | undefined = intersections.pop();
@@ -158,13 +164,23 @@ function bruteForce(start: number, end: number, squares: HTMLDivElement[]): bool
                 invalids.forEach((invalid) => squares[invalid].classList.add('invalid'));
                 current = intersection;
                 console.log(current);
-            } else {
-                console.log('no solution');
-                break;
             }
         }
     }
-    return current === end;
+    const endTime = performance.now();
+    const elapsed = endTime - startTime;
+    const success = current === end;
+    if (status === '') {
+        status = success ? 'Path Found!' : 'Path Not Found';
+    }
+    return {
+        steps: path.length + wrong.length,
+        success,
+        status,
+        path,
+        wrong,
+        elapsed
+    };
 }
 
 export default bruteForce;

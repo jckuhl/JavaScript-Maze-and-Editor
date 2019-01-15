@@ -9,10 +9,18 @@
                 <div id="grid" class="grid">
 
                 </div>
-                <p>Brute Force Solution:</p>
+                <h2>Brute Force</h2>
                 <button @click="bruteForce">Solve</button>
-                <p>Dijkstra's Algorithm: </p>
+                <results 
+                    v-if="validBFResults" 
+                    :results="results.bruteForce"
+                />
+                <h2>Dijkstra's Algorithm: </h2>
                 <button>Solve</button>
+                <results
+                    v-if="validDJResults"
+                    :results="results.dijkstra"
+                />
             </div>
         </div>
     </div>
@@ -22,26 +30,39 @@
 import Vue from 'vue';
 import Solver from '@/models/mazesolver';
 import Sidebar from '@/components/Sidebar.vue';
+import Results from '@/components/Results.vue';
 import store from '@/store';
 import { MazeData } from '@/models/mazedata';
 import { manualMazeBuilder } from '@/models/mazebuilder';
 
 export default Vue.extend({
     components: {
-        Sidebar
+        Sidebar,
+        Results
     },
     data() {
         return {
             squares: [] as HTMLDivElement[],
             mazeConfig: {} as MazeData,
-            results: {}
+            results: {
+                bruteForce: {},
+                dijkstra: {}
+            }
         };
+    },
+    computed: {
+        validBFResults(): boolean {
+            return Object.keys(this.results.bruteForce).length !== 0;
+        },
+        validDJResults(): boolean {
+            return Object.keys(this.results.dijkstra).length !== 0;
+        }
     },
     methods: {
         bruteForce() {
-            this.results = Solver.bruteForce(
-                this.mazeConfig.start, 
-                this.mazeConfig.end, 
+            this.results.bruteForce = Solver.bruteForce(
+                this.mazeConfig.start,
+                this.mazeConfig.end,
                 this.squares
             );
         }

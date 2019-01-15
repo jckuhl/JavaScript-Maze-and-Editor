@@ -3,7 +3,8 @@
         <h1>TypeScript Maze</h1>
         <div id="nav">
             <router-link to="/">Build It!</router-link> |
-            <router-link to="/mazesolver">Solve It!</router-link>
+            <router-link to="/mazesolver">Solve It!</router-link> | 
+            <router-link to="/about">About</router-link>
         </div>
         <router-view />
     </div>

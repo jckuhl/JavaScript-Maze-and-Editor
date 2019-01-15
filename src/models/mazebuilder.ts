@@ -1,6 +1,7 @@
 import { MazeData } from '@/models/mazedata';
 
 export function manualMazeBuilder(maze: HTMLDivElement, config: MazeData): HTMLDivElement[] {
+    maze.innerHTML = '';
     maze.style.gridTemplateRows = `repeat(${config.height}, 1fr)`;
     maze.style.gridTemplateColumns = `repeat(${config.width}, 1fr)`;
     const size = config.height * config.width;
